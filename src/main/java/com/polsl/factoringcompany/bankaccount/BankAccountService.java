@@ -127,7 +127,6 @@ public class BankAccountService {
                     bankAccountRequestDto.getBankSwift().toUpperCase(),
                     bankAccountRequestDto.getBankAccountNumber(),
                     StringUtils.capitalize(bankAccountRequestDto.getBankName()),
-                    null,
                     currentUser.getCompanyId()));
 
         } catch (RuntimeException e) {
@@ -154,7 +153,6 @@ public class BankAccountService {
                     bankAccountRequestDto.getBankSwift().toUpperCase(),
                     bankAccountRequestDto.getBankAccountNumber(),
                     StringUtils.capitalize(bankAccountRequestDto.getBankName()),
-                    null,
                     customer.getCompanyId()));
 
         } catch (RuntimeException e) {
