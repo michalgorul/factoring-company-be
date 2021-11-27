@@ -18,7 +18,7 @@ import java.time.LocalDate;
 @Getter
 @Setter
 @Entity
-@Table(name = "transaction", schema = "public", catalog = "factoring_company")
+@Table(name = "transaction")
 public class TransactionEntity {
 
     @Id

@@ -22,7 +22,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "user", schema = "public", catalog = "factoring_company")
+@Table(name = "user")
 public class UserEntity {
 
     @Id

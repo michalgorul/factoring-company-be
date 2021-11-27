@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "bank_account", schema = "public", catalog = "factoring_company")
+@Table(name = "bank_account")
 public class BankAccountEntity {
     @Id
     @SequenceGenerator(
@@ -37,7 +37,7 @@ public class BankAccountEntity {
     @Column(name = "bank_name", nullable = false, length = 50)
     private String bankName;
 
-    @Column(name = "company_id", nullable = true)
+    @Column(name = "company_id")
     private Integer companyId;
 
     @ManyToOne
@@ -46,7 +46,7 @@ public class BankAccountEntity {
     private CompanyEntity companyByCompanyId;
 
     public BankAccountEntity(String bankSwift, String bankAccountNumber,
-                             String bankName, Integer sellerId, Integer companyId) {
+                             String bankName, Integer companyId) {
         this.bankSwift = bankSwift;
         this.bankAccountNumber = bankAccountNumber;
         this.bankName = bankName;

@@ -21,12 +21,12 @@ public class ProductEntity {
     @Id
     @SequenceGenerator(
             name = "product_id_seq",
-            sequenceName = "currency_id_seq",
+            sequenceName = "product_id_seq",
             allocationSize = 1
     )
     @GeneratedValue(
             strategy = GenerationType.SEQUENCE,
-            generator = "currency_id_seq"
+            generator = "product_id_seq"
     )
     private Long id;
 

@@ -21,7 +21,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity(name = "credit")
-@Table(name = "credit", schema = "public", catalog = "factoring_company")
+@Table(name = "credit")
 public class CreditEntity {
 
     @Id
