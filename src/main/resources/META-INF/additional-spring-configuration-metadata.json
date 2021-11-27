@@ -1,0 +1,8 @@
+{
+  "properties": [
+    {
+      "name": "email.confirm.link",
+      "type": "java.lang.String",
+      "description": "Description for email.confirm.link."
+  }
+] }
