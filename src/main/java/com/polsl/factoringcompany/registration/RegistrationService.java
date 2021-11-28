@@ -20,7 +20,7 @@ public class RegistrationService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    private static final String link = "https://localhost:8443/registration/confirm?token=";
+    private static final String link = "https://factoring-company.herokuapp.com/registration/confirm?token=";
 
     public String register(RegistrationRequest registrationRequest) {
 

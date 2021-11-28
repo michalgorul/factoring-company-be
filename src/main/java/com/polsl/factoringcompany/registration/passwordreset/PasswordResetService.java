@@ -20,7 +20,7 @@ public class PasswordResetService {
     private final ConfirmationTokenService confirmationTokenService;
     private final EmailSender emailSender;
 
-    private static final String link = "http://localhost:3000/password/reset/change?token=";
+    private static final String link = "https://factoring-company.herokuapp.com/password/reset/change?token=";
 
     public String resetPassword(String email) {
 
