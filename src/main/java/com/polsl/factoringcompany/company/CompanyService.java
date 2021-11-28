@@ -32,7 +32,7 @@ public class CompanyService {
 
     public CompanyEntity getCompany(Long id) {
         return this.companyRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundInDatabaseException("Company", id));
+                .orElseThrow(() -> new IdNotFoundInDatabaseException("Company not found"));
     }
 
     public CompanyEntity updateCompany(Long id, CompanyRequestDto companyRequestDto) {

@@ -136,7 +136,7 @@ public class BankAccountService {
 
     public BankAccountEntity getCustomersBankAccount(CustomerEntity customerEntity) {
         return this.bankAccountRepository.findByCompanyId(customerEntity.getCompanyId())
-                .orElseThrow(() -> new IdNotFoundInDatabaseException("Company", Long.valueOf(customerEntity.getCompanyId())));
+                .orElseThrow(() -> new IdNotFoundInDatabaseException("Bank account not found"));
 
     }
 
