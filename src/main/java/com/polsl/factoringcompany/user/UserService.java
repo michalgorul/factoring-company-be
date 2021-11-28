@@ -12,6 +12,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -27,8 +28,12 @@ public class UserService {
     }
 
     public UserEntity getUser(Long id) {
-        return this.userRepository.findById(id)
-                .orElseThrow(() -> new IdNotFoundInDatabaseException("User", id));
+        try{
+            return this.userRepository.findAllById(Collections.singleton(id)).get(0);
+        }
+        catch (IndexOutOfBoundsException e){
+            throw new IdNotFoundInDatabaseException("User", id);
+        }
     }
 
     public Long getCurrentUserId() {
@@ -320,16 +325,17 @@ public class UserService {
 
     public void updateUsersPassword(Long id, String password) {
 
-        Optional<UserEntity> userEntityOptional = userRepository.findById(id);
+        UserEntity userEntityOptional = getUser(id);
 
-        if (userEntityOptional.isEmpty())
-            throw new IdNotFoundInDatabaseException("User", id);
+//        if (userEntityOptional.isEmpty())
+//            throw new IdNotFoundInDatabaseException("User", id);
 
         passwordUpdateValidator(password);
 
         try {
-            userEntityOptional.get().setPassword(bCryptPasswordEncoder.encode(password));
-            this.userRepository.save(userEntityOptional.get());
+            assert userEntityOptional != null;
+            userEntityOptional.setPassword(bCryptPasswordEncoder.encode(password));
+            this.userRepository.save(userEntityOptional);
         } catch (RuntimeException e) {
             throw new RuntimeException(e);
         }

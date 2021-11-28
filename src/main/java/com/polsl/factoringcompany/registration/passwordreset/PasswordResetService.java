@@ -30,7 +30,7 @@ public class PasswordResetService {
         ConfirmationTokenEntity confirmationTokenEntity = new ConfirmationTokenEntity(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(30),
+                LocalDateTime.now().plusHours(3),
                 userEntity);
 
         confirmationTokenService.saveConfirmationToken(confirmationTokenEntity);
