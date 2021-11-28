@@ -30,7 +30,7 @@ public class RegistrationService {
         ConfirmationTokenEntity confirmationTokenEntity = new ConfirmationTokenEntity(
                 token,
                 LocalDateTime.now(),
-                LocalDateTime.now().plusMinutes(15),
+                LocalDateTime.now().plusDays(1),
                 userEntity);
 
         confirmationTokenService.saveConfirmationToken(confirmationTokenEntity);
