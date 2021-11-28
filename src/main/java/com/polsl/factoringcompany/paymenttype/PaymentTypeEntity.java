@@ -15,7 +15,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "payment_type")
+@Table(name = "payment_type", schema ="public")
 public class PaymentTypeEntity {
 
     @Id

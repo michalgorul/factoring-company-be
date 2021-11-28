@@ -14,7 +14,7 @@ import java.util.Objects;
 @Getter
 @Setter
 @Entity
-@Table(name = "currency")
+@Table(name = "currency", schema ="public")
 public class CurrencyEntity {
 
     @Id

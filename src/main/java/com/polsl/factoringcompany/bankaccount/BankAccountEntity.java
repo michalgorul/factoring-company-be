@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "bank_account")
+@Table(name = "bank_account", schema ="public")
 public class BankAccountEntity {
     @Id
     @SequenceGenerator(

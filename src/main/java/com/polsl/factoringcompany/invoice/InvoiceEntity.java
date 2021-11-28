@@ -23,7 +23,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity(name = "invoice")
-@Table(name = "invoice")
+@Table(name = "invoice", schema ="public")
 public class InvoiceEntity {
     @Id
     @SequenceGenerator(

@@ -17,7 +17,7 @@ import java.util.Collection;
 @Setter
 @Entity
 @NoArgsConstructor
-@Table(name = "customer")
+@Table(name = "customer", schema ="public")
 public class CustomerEntity {
 
     @Id

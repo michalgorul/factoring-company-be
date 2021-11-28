@@ -18,7 +18,7 @@ import java.time.LocalDateTime;
 @EqualsAndHashCode
 @NoArgsConstructor
 @Entity
-@Table(name = "confirmation_token", schema = "public", catalog = "factoring_company")
+@Table(name = "confirmation_token", schema = "public")
 public class ConfirmationTokenEntity {
 
     @Id

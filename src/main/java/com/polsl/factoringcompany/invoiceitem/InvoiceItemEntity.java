@@ -16,7 +16,7 @@ import java.math.BigDecimal;
 @Getter
 @Setter
 @Entity
-@Table(name = "invoice_item")
+@Table(name = "invoice_item", schema ="public")
 public class InvoiceItemEntity {
 
     @Id

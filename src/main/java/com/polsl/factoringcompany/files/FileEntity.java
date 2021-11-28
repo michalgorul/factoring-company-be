@@ -16,7 +16,7 @@ import java.util.UUID;
 @Setter
 @NoArgsConstructor
 @Entity
-@Table(name = "file")
+@Table(name = "file", schema ="public")
 public class FileEntity {
 
     @Id

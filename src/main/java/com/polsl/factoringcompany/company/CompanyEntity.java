@@ -17,7 +17,7 @@ import java.util.Collection;
 @Getter
 @Setter
 @Entity
-@Table(name = "company")
+@Table(name = "company", schema ="public")
 public class CompanyEntity {
 
     @Id
