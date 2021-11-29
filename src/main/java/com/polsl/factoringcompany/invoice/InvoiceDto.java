@@ -6,6 +6,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.sql.Timestamp;
 
 @Getter
@@ -42,8 +43,10 @@ public class InvoiceDto {
         this.saleDate = invoiceCreateRequest.getPerformanceDate();
         this.paymentDeadline = Timestamp.valueOf(invoiceCreateRequest.getPerformanceDate()
                 .toLocalDateTime().plusMonths(invoiceCreateRequest.getMonths()));
-        this.toPay = BigDecimal.valueOf(netValue.doubleValue() + vatValue.doubleValue());
-        this.toPayByUser = BigDecimal.valueOf(toPay.doubleValue() + (toPay.doubleValue() * interest));
+        this.toPay = BigDecimal.valueOf(netValue.doubleValue() + vatValue.doubleValue())
+                .setScale(2, RoundingMode.HALF_UP);
+        this.toPayByUser = BigDecimal.valueOf(toPay.doubleValue() + (toPay.doubleValue() * interest))
+                .setScale(2, RoundingMode.HALF_UP);
         this.paidByUser = new BigDecimal(0);
         this.remarks = invoiceCreateRequest.getRemarks();
         this.status = "active";
