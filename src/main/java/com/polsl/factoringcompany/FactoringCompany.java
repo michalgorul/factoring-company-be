@@ -15,6 +15,8 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 
 /**
  * The type Factoring company. The main class that runs whole Spring Boot application
+ * @author Michal Goral
+ * @version 1.0
  */
 @SpringBootApplication
 @EnableSwagger2

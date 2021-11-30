@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 /**
- * The User controller.
+ * The User controller. Class for creating endpoints.
  * @author Michal Goral
  * @version 1.0
  */

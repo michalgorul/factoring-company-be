@@ -10,7 +10,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.util.Optional;
 
 /**
- * The interface User repository. Used for accessing database
+ * The interface User repository. Used for accessing database.
  * @author Michal Goral
  * @version 1.0
  */
