@@ -9,17 +9,45 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
 
+/**
+ * The interface User repository. Used for accessing database
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Repository
 public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
+    /**
+     * Finds user by email.
+     *
+     * @param email the email
+     * @return the user
+     */
     Optional<UserEntity> findByEmail(String email);
 
+    /**
+     * Finds user by username.
+     *
+     * @param username the username
+     * @return the user
+     */
     Optional<UserEntity> findByUsername(String username);
 
+    /**
+     * Finds user by username.
+     *
+     * @param id the id of user to be looked for
+     * @return the user
+     */
     @NotNull
     Optional<UserEntity> findById(@NotNull Long id);
 
 
+    /**
+     * Enables app user.
+     *
+     * @param id the id of user to be enabled
+     */
     @Transactional
     @Modifying
     @Query("UPDATE UserEntity a " +

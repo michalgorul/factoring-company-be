@@ -24,7 +24,7 @@ public class PasswordResetService {
 
     public String resetPassword(String email) {
 
-        UserEntity userEntity = userService.getUSerByEmail(email);
+        UserEntity userEntity = userService.getUserByEmail(email);
 
         String token = UUID.randomUUID().toString();
         ConfirmationTokenEntity confirmationTokenEntity = new ConfirmationTokenEntity(

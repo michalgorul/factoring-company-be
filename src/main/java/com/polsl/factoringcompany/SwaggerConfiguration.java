@@ -20,15 +20,29 @@ import java.util.Date;
 import java.util.List;
 
 
+/**
+ * The type Swagger configuration bean.
+ */
 @Configuration
 @EnableSwagger2
 @Import(springfox.bean.validators.configuration.BeanValidatorPluginsConfiguration.class)
 public class SwaggerConfiguration {
 
+    /**
+     * The constant AUTHORIZATION_HEADER.
+     */
     public static final String AUTHORIZATION_HEADER = "Authorization";
+    /**
+     * The constant DEFAULT_INCLUDE_PATTERN.
+     */
     public static final String DEFAULT_INCLUDE_PATTERN = "/api/.*";
     private final Logger log = LoggerFactory.getLogger(SwaggerConfiguration.class);
 
+    /**
+     * Swagger springfox docket.
+     *
+     * @return the docket
+     */
     @Bean
     public Docket swaggerSpringfoxDocket() {
         log.debug("Starting Swagger");
@@ -76,6 +90,11 @@ public class SwaggerConfiguration {
                 .build();
     }
 
+    /**
+     * Default auth list.
+     *
+     * @return the list
+     */
     List<SecurityReference> defaultAuth() {
         AuthorizationScope authorizationScope
                 = new AuthorizationScope("global", "accessEverything");
