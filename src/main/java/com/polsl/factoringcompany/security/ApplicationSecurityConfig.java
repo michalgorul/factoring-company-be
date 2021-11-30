@@ -23,15 +23,37 @@ import java.util.Arrays;
 
 import static com.polsl.factoringcompany.security.ApplicationUserRole.ADMIN;
 
+/**
+ * The type Application security configuration class.
+ * <a href="https://docs.spring.io/spring-security/site/docs/current/api/org/springframework/security/config/annotation/web/configuration/WebSecurityConfigurerAdapter.html">Click for more info</a>
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
 public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
 
+    /**
+     * the bean of password encoder
+     */
     private final PasswordEncoder passwordEncoder;
+
+    /**
+     * the bean of application user service class
+     */
     private final ApplicationUserService applicationUserService;
+
+    /**
+     * the secret key
+     */
     private final SecretKey secretKey;
 
+    /**
+     * Configures security properties for application.
+     * @param http the http security
+     * @throws Exception the exception
+     */
     @Override
     protected void configure(HttpSecurity http) throws Exception {
 
@@ -57,11 +79,21 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
                 .antMatchers("/api/**").hasRole(ADMIN.name());
     }
 
+    /**
+     * Configures authentication provider
+     * @param auth the AuthenticationManagerBuilder instance
+     * @throws Exception the exception
+     */
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());
     }
 
+    /**
+     * Bean of DAO authentication provider.
+     *
+     * @return the dao authentication provider
+     */
     @Bean
     public DaoAuthenticationProvider daoAuthenticationProvider() {
         DaoAuthenticationProvider provider = new DaoAuthenticationProvider();
@@ -71,6 +103,11 @@ public class ApplicationSecurityConfig extends WebSecurityConfigurerAdapter {
         return provider;
     }
 
+    /**
+     * Configures cors filter cors for security of application.
+     *
+     * @return the cors filter bean
+     */
     @Bean
     public CorsFilter corsFilter() {
         CorsConfiguration corsConfiguration = new CorsConfiguration();

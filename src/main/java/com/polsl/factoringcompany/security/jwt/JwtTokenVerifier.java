@@ -24,11 +24,27 @@ import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+/**
+ * The JWT token verifier. It is filter for http requests
+ * @author Michal Goral
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 public class JwtTokenVerifier extends OncePerRequestFilter {
 
+    /**
+     * the secret key bean
+     */
     private final SecretKey secretKey;
 
+    /**
+     * Filters and checks if JWT token is proper
+     * @param httpServletRequest the http servlet request
+     * @param httpServletResponse the http servlet response
+     * @param filterChain the filter chain
+     * @throws ServletException the servlet exception
+     * @throws IOException the io exception
+     */
     @Override
     protected void doFilterInternal(HttpServletRequest httpServletRequest, @NotNull HttpServletResponse httpServletResponse,
                                     @NotNull FilterChain filterChain) throws ServletException, IOException {

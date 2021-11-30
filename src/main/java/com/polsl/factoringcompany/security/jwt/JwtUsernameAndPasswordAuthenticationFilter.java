@@ -17,12 +17,31 @@ import java.io.IOException;
 import java.time.LocalDate;
 import java.util.Date;
 
+/**
+ * The type Jwt username and password authentication filter.
+ * @author Michal Goral
+ * @version 1.0
+ */
 @RequiredArgsConstructor
 public class JwtUsernameAndPasswordAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
+    /**
+     * the AuthenticationManager bean
+     */
     private final AuthenticationManager authenticationManager;
+
+    /**
+     * the secret key bean
+     */
     private final SecretKey secretKey;
 
+    /**
+     * Attempts authentication of JWT token
+     * @param request the request
+     * @param response the response
+     * @return result of authentication
+     * @throws AuthenticationException the AuthenticationException exception
+     */
     // Trigger when we issue POST request to /login
     @Override
     public Authentication attemptAuthentication(HttpServletRequest request,
