@@ -39,7 +39,8 @@ public class RegistrationService {
     /**
      * the link in send email to validate user's mail
      */
-    private static final String link = "https://factoring-company-backend.herokuapp.com/registration/confirm?token=";
+//    private static final String link = "https://factoring-company-backend.herokuapp.com/registration/confirm?token=";
+    private static final String link = "https://factoring-company.herokuapp.com/register/success/";
 
     /**
      * Registers the new user in application. It is also responsible for sending confirmation mail
