@@ -10,6 +10,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Collection;
 
+/**
+ * The type Payment Type entity. Representation of user in database
+ * @author Michal Goral
+ * @version 1.0
+ */
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
@@ -18,6 +23,9 @@ import java.util.Collection;
 @Table(name = "payment_type", schema ="public")
 public class PaymentTypeEntity {
 
+    /**
+     * the id
+     */
     @Id
     @SequenceGenerator(
             name = "payment_type_id_seq",
@@ -30,6 +38,9 @@ public class PaymentTypeEntity {
     )
     private Long id;
 
+    /**
+     * the payment type name
+     */
     @Column(name = "payment_type_name", nullable = false, length = 25, unique = true)
     private String paymentTypeName;
 
@@ -37,6 +48,11 @@ public class PaymentTypeEntity {
     @OneToMany(mappedBy = "paymentTypeByPaymentTypeId")
     private Collection<InvoiceEntity> invoicesById;
 
+    /**
+     * Instantiates a new Payment type entity.
+     *
+     * @param name the name
+     */
     public PaymentTypeEntity(String name) {
         this.paymentTypeName = name;
     }

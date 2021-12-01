@@ -10,6 +10,11 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.util.Collection;
 
+/**
+ * The type Product entity. Representation of user in database
+ * @author Michal Goral
+ * @version 1.0
+ */
 @NoArgsConstructor
 @EqualsAndHashCode
 @Getter
@@ -18,6 +23,9 @@ import java.util.Collection;
 @Table(name = "product", schema ="public")
 public class ProductEntity {
 
+    /**
+     * the id
+     */
     @Id
     @SequenceGenerator(
             name = "product_id_seq",
@@ -30,19 +38,39 @@ public class ProductEntity {
     )
     private Long id;
 
+    /**
+     * the name
+     */
     @Column(name = "name", nullable = false, length = 50)
     private String name;
 
+    /**
+     * the PKWIU
+     * <a href="https://pl.wikipedia.org/wiki/Polska_Klasyfikacja_Wyrob%C3%B3w_i_Us%C5%82ug">See more</a>
+     */
     @Column(name = "pkwiu", nullable = false, length = 10)
     private String pkwiu;
 
+    /**
+     * the measure unit, e.g. kilograms, number
+     */
     @Column(name = "measure_unit", nullable = false, length = 8)
     private String measureUnit;
 
+    /**
+     * the collection of invoices that are associated with product
+     */
     @OneToMany(mappedBy = "productByProductId")
     @JsonIgnore
     private Collection<InvoiceItemEntity> invoiceItemsById;
 
+    /**
+     * Instantiates a new Product entity.
+     *
+     * @param name        the name
+     * @param pkwiu       the pkwiu
+     * @param measureUnit the measure unit
+     */
     public ProductEntity(String name, String pkwiu, String measureUnit) {
         this.name = name;
         this.pkwiu = pkwiu;

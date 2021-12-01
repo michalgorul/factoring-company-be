@@ -21,7 +21,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * Finds user by email.
      *
      * @param email the email
-     * @return the user
+     * @return the user optional
      */
     Optional<UserEntity> findByEmail(String email);
 
@@ -29,7 +29,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * Finds user by username.
      *
      * @param username the username
-     * @return the user
+     * @return the user optional
      */
     Optional<UserEntity> findByUsername(String username);
 
@@ -37,7 +37,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
      * Finds user by username.
      *
      * @param id the id of user to be looked for
-     * @return the user
+     * @return the user optional
      */
     @NotNull
     Optional<UserEntity> findById(@NotNull Long id);

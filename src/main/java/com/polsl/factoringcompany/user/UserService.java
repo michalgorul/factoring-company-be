@@ -45,7 +45,7 @@ public class UserService {
     }
 
     /**
-     * Gets desired user.
+     * Gets desired user. If user is not found it throws IdNotFoundInDatabaseException
      *
      * @param id the id of desired user
      * @return the desired user
