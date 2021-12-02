@@ -11,7 +11,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * The type Product entity. Representation of user in database
+ * The type Product entity. Representation of product in database
  * @author Michal Goral
  * @version 1.0
  */
