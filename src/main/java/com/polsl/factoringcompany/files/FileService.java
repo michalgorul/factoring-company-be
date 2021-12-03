@@ -21,14 +21,37 @@ import java.util.Optional;
 import java.util.UUID;
 import java.util.stream.Collectors;
 
+/**
+ * The type File service. Used to connect controller with Data access object
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class FileService {
 
+    /**
+     * the file repository bean
+     */
     private final FileRepository fileRepository;
+
+    /**
+     * the user service bean
+     */
     private final UserService userService;
+
+    /**
+     * the credit service bean
+     */
     private final CreditService creditService;
 
+    /**
+     * Saves file to database.
+     *
+     * @param file    the file
+     * @param catalog the name of catalog
+     * @throws IOException the io exception
+     */
     public void save(MultipartFile file, String catalog) throws IOException {
 
         Long currentUserId = userService.getCurrentUserId();
@@ -47,6 +70,13 @@ public class FileService {
 
     }
 
+    /**
+     * Handles uploading file from frontend side.
+     *
+     * @param file    the file
+     * @param catalog the name of catalog
+     * @return the response entity
+     */
     public ResponseEntity<String> uploadFile(MultipartFile file, String catalog) {
         try {
             this.save(file, catalog);
@@ -61,6 +91,12 @@ public class FileService {
         }
     }
 
+    /**
+     * Gets file specified by id.
+     *
+     * @param id the id
+     * @return the file
+     */
     @Transactional
     public ResponseEntity<byte[]> getFile(UUID id) {
         Optional<FileEntity> fileEntityOptional = fileRepository.findById(id);
@@ -78,6 +114,11 @@ public class FileService {
     }
 
 
+    /**
+     * Gets all files of currently logged user in JWT token.
+     *
+     * @return the all files current user
+     */
     public List<FileResponse> getAllFilesCurrentUser() {
         return fileRepository.findAll()
                 .stream()
@@ -103,6 +144,11 @@ public class FileService {
         return fileResponse;
     }
 
+    /**
+     * Gets used space by currently logged user in JWT token.
+     *
+     * @return the used space
+     */
     public Long getUsedSpace() {
         List<FileResponse> allFilesCurrentUser = this.getAllFilesCurrentUser();
 
@@ -112,6 +158,12 @@ public class FileService {
                 .mapToLong(Long::intValue).sum();
     }
 
+    /**
+     * Deletes file from database.
+     *
+     * @param id the id
+     * @throws IdNotFoundInDatabaseException the id not found in database exception
+     */
     public void deleteFile(UUID id) throws IdNotFoundInDatabaseException {
         try {
             this.fileRepository.deleteById(id);

@@ -11,6 +11,8 @@ import java.sql.Timestamp;
 
 /**
  * The type Invoice dto.
+ * @author Michal Goral
+ * @version 1.0
  */
 @Getter
 @Setter
