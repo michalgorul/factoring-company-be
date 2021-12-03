@@ -26,35 +26,93 @@ import java.util.Formatter;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type Invoice service. Used to connect controller with Data access object
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class InvoiceService {
 
+    /**
+     * the invoice repository bean
+     */
     private final InvoiceRepository invoiceRepository;
+
+    /**
+     * the user service bean
+     */
     private final UserService userService;
+
+    /**
+     * the currency service bean
+     */
     private final CurrencyService currencyService;
+
+    /**
+     * the payment type service bean
+     */
     private final PaymentTypeService paymentTypeService;
+
+    /**
+     * the customer service bean
+     */
     private final CustomerService customerService;
+
+    /**
+     * the product service bean
+     */
     private final ProductService productService;
+
+    /**
+     * the invoice item service bean
+     */
     private final InvoiceItemService invoiceItemService;
+
+    /**
+     * the transaction service bean
+     */
     private final TransactionService transactionService;
 
+    /**
+     * Gets all invoices from database.
+     *
+     * @return the invoices
+     */
     public List<InvoiceEntity> getInvoices() {
         return this.invoiceRepository.findAll();
     }
 
 
+    /**
+     * Gets invoices associated with currently logged in JWT token  user.
+     *
+     * @return the invoices from current current user
+     */
     public List<InvoiceEntity> getInvoicesCurrentUser() {
         Long currentUserId = userService.getCurrentUserId();
         return this.invoiceRepository.findAllByUserId(Math.toIntExact(currentUserId));
     }
 
+    /**
+     * Gets invoice invoice entity specified by id.
+     *
+     * @param id the id
+     * @return the invoice
+     */
     public InvoiceEntity getInvoice(Long id) {
         return this.invoiceRepository.findById(id)
                 .orElseThrow(() -> new IdNotFoundInDatabaseException("Invoice", id));
     }
 
 
+    /**
+     * Creates invoice entity and saves it to database.
+     *
+     * @param invoiceCreateRequest the invoice create request
+     * @return the invoice entity
+     */
     public InvoiceEntity addInvoice(InvoiceCreateRequest invoiceCreateRequest) {
 
         try {
@@ -94,6 +152,13 @@ public class InvoiceService {
         }
     }
 
+    /**
+     * Updates invoice entity and saves it to database.
+     *
+     * @param id         the id
+     * @param invoiceDto the invoice dto
+     * @return the invoice entity
+     */
     public InvoiceEntity updateInvoice(Long id, InvoiceDto invoiceDto) {
 
         Optional<InvoiceEntity> invoiceEntityOptional = invoiceRepository.findById(id);
@@ -127,6 +192,11 @@ public class InvoiceService {
         }
     }
 
+    /**
+     * Deletes invoice from database.
+     *
+     * @param id the id of invoice to delete
+     */
     public void deleteInvoice(Long id) {
         try {
             this.invoiceRepository.deleteById(id);
@@ -135,17 +205,35 @@ public class InvoiceService {
         }
     }
 
+    /**
+     * Gets invoice currency code.
+     *
+     * @param invoiceId the invoice id
+     * @return the invoice currency code
+     */
     public String getInvoiceCurrencyCode(Long invoiceId) {
         InvoiceEntity invoiceEntity = this.getInvoice(invoiceId);
         return currencyService.getCurrency((long) invoiceEntity.getCurrencyId()).getCode();
 
     }
 
+    /**
+     * Gets payment method.
+     *
+     * @param invoiceId the invoice id
+     * @return the payment method
+     */
     public String getPaymentMethod(Long invoiceId) {
         InvoiceEntity invoiceEntity = this.getInvoice(invoiceId);
         return paymentTypeService.getPaymentType((long) invoiceEntity.getPaymentTypeId()).getPaymentTypeName();
     }
 
+    /**
+     * Gets number for new invoice.
+     * It is created based on the last created invoice in the database
+     * @param invoiceCreateRequest the invoice create request
+     * @return the number for new invoice
+     */
     private String getNewInvoiceNumber(InvoiceCreateRequest invoiceCreateRequest) {
         StringBuilder newInvoiceNumber = new StringBuilder();
         Formatter formatter = new Formatter(newInvoiceNumber);
@@ -163,6 +251,13 @@ public class InvoiceService {
         return newInvoiceNumber.toString();
     }
 
+    /**
+     * Updates invoice payment info.
+     *
+     * @param id                              the id
+     * @param invoicePaymentInfoUpdateRequest the invoice payment info update request
+     * @return the invoice entity
+     */
     public InvoiceEntity updateInvoicePaymentInfo(Long id, InvoicePaymentInfoUpdateRequest invoicePaymentInfoUpdateRequest) {
 
         Optional<InvoiceEntity> invoiceEntityOptional = invoiceRepository.findById(id);
@@ -187,11 +282,21 @@ public class InvoiceService {
 
     }
 
+    /**
+     * Gets invoice all statuses from databases.
+     *
+     * @return the invoice statuses
+     */
     public List<String> getInvoiceStatuses() {
         return this.invoiceRepository.getStatuses();
 
     }
 
+    /**
+     * Gets active invoices paid value for currently logged user in JWT token.
+     *
+     * @return the active invoices paid value
+     */
     public Double getActiveInvoicesPaidValue() {
 
         Long currentUserId = userService.getCurrentUserId();
@@ -205,6 +310,12 @@ public class InvoiceService {
 
     }
 
+    /**
+     * Updates specific invoice entity from active to unfunded
+     * If the payment deadline has passed the status from active is updated to unfunded.
+     * After that user can pay for the invoice
+     * @param invoiceEntity the invoice entity
+     */
     private void updateFromActiveToUnfunded(InvoiceEntity invoiceEntity) {
         try {
             if (invoiceEntity.getPaymentDeadline().before(Timestamp.valueOf(LocalDateTime.now())) &&
@@ -217,6 +328,9 @@ public class InvoiceService {
         }
     }
 
+    /**
+     * Updates invoice statuses.
+     */
     //    @Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
     //    Fires at 12 PM every day:
     @Scheduled(cron = "0 1 0 * * ?")
@@ -225,9 +339,13 @@ public class InvoiceService {
         for (InvoiceEntity invoiceEntity : allByStatusEqualsActive) {
             updateFromActiveToUnfunded(invoiceEntity);
         }
-        System.out.println("invoice statuses updated");
     }
 
+    /**
+     * Updates invoice fields: paidByUser, toPayByUser specified by id.
+     *
+     * @param id the id
+     */
     public void payForInvoice(Long id) {
         try {
             InvoiceEntity invoiceEntity = this.invoiceRepository.findById(id).orElse(null);
