@@ -11,22 +11,51 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type customer service. Used to connect controller with Data access object
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class CustomerService {
 
+    /**
+     * the customer repository bean
+     */
     private final CustomerRepository customerRepository;
+
+    /**
+     * the user service bean
+     */
     private final UserService userService;
 
+    /**
+     * Gets all customers from database.
+     *
+     * @return the customers
+     */
     public List<CustomerEntity> getCustomers() {
         return this.customerRepository.findAll();
     }
 
+    /**
+     * Gets customer specified by id.
+     *
+     * @param id the id
+     * @return the customer
+     */
     public CustomerEntity getCustomer(Long id) {
         return this.customerRepository.findById(id)
                 .orElseThrow(() -> new IdNotFoundInDatabaseException("Customer", id));
     }
 
+    /**
+     * Creates customer entity and saves it to database.
+     *
+     * @param customerRequestDto the customer request dto
+     * @return the customer entity
+     */
     public CustomerEntity addCustomer(CustomerRequestDto customerRequestDto) {
 
         nameValidator(customerRequestDto);
@@ -49,6 +78,11 @@ public class CustomerService {
         }
     }
 
+    /**
+     * Deletes customer from database specified by id.
+     *
+     * @param id the id
+     */
     public void deleteCustomer(Long id) {
         try {
             this.customerRepository.deleteById(id);
@@ -57,6 +91,13 @@ public class CustomerService {
         }
     }
 
+    /**
+     * Updates customer entity and saves it to database.
+     *
+     * @param id                 the id
+     * @param customerRequestDto the customer request dto
+     * @return the customer entity
+     */
     public CustomerEntity updateCustomer(Long id, CustomerRequestDto customerRequestDto) {
 
         Optional<CustomerEntity> customerEntityOptional = customerRepository.findById(id);
@@ -84,6 +125,10 @@ public class CustomerService {
         }
     }
 
+    /**
+     * Validates if names for customer entity are in proper form
+     * @param customerEntity the customer entity
+     */
     private void nameValidator(CustomerRequestDto customerEntity) {
         if (StringValidator.stringWithSpacesImproper(customerEntity.getFirstName(), 50)) {
             throw new ValueImproperException(customerEntity.getFirstName());
@@ -104,6 +149,11 @@ public class CustomerService {
     }
 
 
+    /**
+     * Gets currently logged in JWT token user customers.
+     *
+     * @return the current user customers
+     */
     public List<CustomerEntity> getCurrentUserCustomers() {
 
         Long currentUserId = userService.getCurrentUserId();
@@ -111,6 +161,12 @@ public class CustomerService {
 
     }
 
+    /**
+     * Updates customer company id.
+     *
+     * @param customerId the customer id
+     * @param companyId  the company id
+     */
     public void updateCustomerCompanyId(int customerId, int companyId) {
 
         Optional<CustomerEntity> customerEntity = customerRepository.findById((long) customerId);
@@ -126,6 +182,12 @@ public class CustomerService {
         }
     }
 
+    /**
+     * Gets customer specified by phone.
+     *
+     * @param phone the phone
+     * @return the customer by phone
+     */
     public CustomerEntity getCustomerByPhone(String phone) {
         return this.customerRepository.findByPhone(phone)
                 .orElseThrow(() -> new IdNotFoundInDatabaseException("Customer", 0L));
