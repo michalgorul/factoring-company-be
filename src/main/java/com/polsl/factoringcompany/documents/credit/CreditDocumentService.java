@@ -17,13 +17,36 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+/**
+ * The type credit document service. Used to connect controller with Data access object
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class CreditDocumentService {
+    /**
+     * the path to template of this document
+     */
     private final static String PATH = "src/main/resources/templates/loan_agreement_template.docx";
+
+    /**
+     * the user service bean
+     */
     private final UserService userService;
+
+    /**
+     * the credit service bean
+     */
     private final CreditService creditService;
 
+    /**
+     * Generates docx file from template.
+     *
+     * @param creditNumber the credit number
+     * @return the byte array
+     * @throws Exception the exception
+     */
     public byte[] generateDocxFileFromTemplate(String creditNumber) throws Exception {
 
         File invoiceTemplate = new File(PATH);

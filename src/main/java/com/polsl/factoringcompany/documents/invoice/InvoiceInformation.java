@@ -17,41 +17,173 @@ import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.HashMap;
 
+
+/**
+ * The type Invoice document information.
+ * It stores all variables that are necessary for creating invoice document
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
 public class InvoiceInformation {
+
+    /**
+     * the invoice number
+     */
     private String invoiceNumber;
+
+    /**
+     * the date of delivery date on invoice
+     */
     private String deliveryDate;
+
+    /**
+     * the date of issue on invoice
+     */
     private String issueDate;
+
+    /**
+     * the customer name
+     */
     private String customerName;
+
+    /**
+     * the customer street
+     */
     private String customerStreet;
+
+    /**
+     * the customer city
+     */
     private String customerCity;
+
+    /**
+     * the delivery of service method
+     */
     private String deliveryMethod;
+
+    /**
+     * the description of delivery
+     */
     private String deliveryDescription;
+
+    /**
+     * the payment method
+     */
     private String paymentMethod;
+
+    /**
+     * the item on invoice name
+     */
     private String itemName;
+
+    /**
+     * the PKWIU of product on invoice
+     */
     private String pkwiu;
+
+    /**
+     * the quantity of product
+     */
     private String quantity;
+
+    /**
+     * the measure unit of product
+     */
     private String unit;
+
+    /**
+     * the vat rate of product
+     */
     private String vat;
+
+    /**
+     * the gross value on invoice
+     */
     private String gross;
+
+    /**
+     * the net value on invoice
+     */
     private String net;
+
+    /**
+     * the vat value for whole invoice
+     */
     private String vatValue;
+
+    /**
+     * the amount to pay on invoice
+     */
     private String toPay;
+
+    /**
+     * the amount to pay on invoice in words
+     */
     private String toPayInWords;
+
+    /**
+     * the seller company name
+     */
     private String sellerCompany;
+
+    /**
+     * the seller street
+     */
     private String sellerStreet;
+
+    /**
+     * the seller postal code
+     */
     private String sellerPostalCode;
+
+    /**
+     * the seller city
+     */
     private String sellerCity;
+
+    /**
+     * the seller country
+     */
     private String sellerCountry;
+
+    /**
+     * the seller phone number
+     */
     private String sellerPhone;
+
+    /**
+     * the seller company's NIP number
+     * <a href="https://pl.wikipedia.org/wiki/Numer_identyfikacji_podatkowej">See more</a>
+     */
     private String sellerNip;
+
+    /**
+     * the seller company's REGON number
+     * <a href="https://pl.wikipedia.org/wiki/REGON">See more</a>
+     */
     private String sellerRegon;
 
+    /**
+     * The constant ApplicationContext .
+     */
     public static ApplicationContext ctx;
 
+    /**
+     * Instantiates a new Invoice information.
+     *
+     * @param invoiceEntity     the invoice entity
+     * @param customerEntity    the customer entity
+     * @param invoiceItemEntity the invoice item entity
+     * @param productEntity     the product entity
+     * @param currencyCode      the currency code
+     * @param paymentMethod     the payment method
+     * @param userEntity        the user entity
+     * @param companyEntity     the company entity
+     */
     public InvoiceInformation(InvoiceEntity invoiceEntity, CustomerEntity customerEntity,
                               InvoiceItemEntity invoiceItemEntity, ProductEntity productEntity,
                               String currencyCode, String paymentMethod, UserEntity userEntity, CompanyEntity companyEntity) {
@@ -95,6 +227,11 @@ public class InvoiceInformation {
         this.sellerRegon = companyEntity.getRegon();
     }
 
+    /**
+     * Gets all variables of this instance in hash map.
+     *
+     * @return the variables in hash map
+     */
     public HashMap<String, String> getVariablesInHashMap() {
         HashMap<String, String> variables = new HashMap<>();
         variables.put("invoice_number", this.invoiceNumber);

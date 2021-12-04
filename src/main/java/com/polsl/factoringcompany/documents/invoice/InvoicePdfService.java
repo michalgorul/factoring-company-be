@@ -36,19 +36,58 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.HashMap;
 
+/**
+ * The type Invoice pdf service. Used to connect controller with Data access object
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class InvoicePdfService {
 
+    /**
+     * the path to invoice document template
+     */
     private final static String PATH = "src/main/resources/templates/invoice_template.docx";
+
+    /**
+     * the invoice service bean
+     */
     private final InvoiceService invoiceService;
+
+    /**
+     * the customer service bean
+     */
     private final CustomerService customerService;
+
+    /**
+     * the invoice item service bean
+     */
     private final InvoiceItemService invoiceItemService;
+
+    /**
+     * the product service bean
+     */
     private final ProductService productService;
+
+    /**
+     * the user service bean
+     */
     private final UserService userService;
+
+    /**
+     * the company service bean
+     */
     private final CompanyService companyService;
 
 
+    /**
+     * Generates docx file from template.
+     *
+     * @param invoiceId the invoice id
+     * @return the byte array
+     * @throws Exception the exception
+     */
     public byte[] generateDocxFileFromTemplate(Long invoiceId) throws Exception {
 
         File invoiceTemplate = new File(PATH);
@@ -83,6 +122,12 @@ public class InvoicePdfService {
 
     }
 
+    /**
+     * Puts barcode to docx file.
+     *
+     * @param wordMLPackage the word ml package
+     * @param barcodeText   the barcode text
+     */
     public static void putBarcode(WordprocessingMLPackage wordMLPackage, String barcodeText) {
 
         try {
@@ -102,16 +147,15 @@ public class InvoicePdfService {
     }
 
     /**
-     * We create an object factory and use it to create a paragraph and a run.
-     * Then we add the run to the paragraph. Next we create a drawing and
-     * add it to the run. Finally we add the inline object to the drawing and
+     * Creates an object factory and use it to create a paragraph and a run.
+     * Then adds the run to the paragraph. Next it creates a drawing and
+     * adds it to the run. Finally it adds the inline object to the drawing and
      * return the paragraph.
      *
      * @param inline The inline object containing the image.
      * @return the paragraph containing the image
      */
     private static P addInlineImageToParagraph(Inline inline) {
-        // Now add the in-line image to a paragraph
         ObjectFactory factory = new ObjectFactory();
         P paragraph = factory.createP();
         R run = factory.createR();
@@ -122,6 +166,12 @@ public class InvoicePdfService {
         return paragraph;
     }
 
+    /**
+     * Gets barcode image. It is generateb by  org.krysalis.barcode4j.output.bitmap
+     * <a href="http://barcode4j.sourceforge.net/trunk/javadocs/org/krysalis/barcode4j/output/bitmap/BitmapCanvasProvider.html">See more</a>
+     * @param barcodeText the text that barcode will be generated from
+     * @return the barcode image in byte array
+     */
     private static byte[] getBarcode(String barcodeText) {
         Code128Bean barcodeGenerator = new Code128Bean();
         BitmapCanvasProvider canvas =

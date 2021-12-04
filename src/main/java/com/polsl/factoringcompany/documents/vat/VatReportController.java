@@ -10,13 +10,28 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+/**
+ * The type vat report controller. Class for creating endpoints.
+ * @author Michal Goral
+ * @version 1.0
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/api/report/vat")
 public class VatReportController {
 
+    /**
+     * the vat report service bean
+     */
     private VatReportService vatReportService;
 
+    /**
+     * Gets generated vat report in pdf.
+     *
+     * @param customerId the customer id
+     * @return the vat report pdf
+     * @throws Exception the exception
+     */
     @GetMapping(path = "/{customerId}")
     public ResponseEntity<byte[]> getVatReportPdf(@PathVariable Long customerId) throws Exception {
 
@@ -33,6 +48,12 @@ public class VatReportController {
 
     }
 
+    /**
+     * Gets vat information from nip about customer.
+     *
+     * @param customerId the customer id
+     * @return the vat information from nip database
+     */
     @GetMapping(path = "/customer/{customerId}")
     public VatReportInformation getVatInformationFromNip(@PathVariable Long customerId) {
         return this.vatReportService.getCustomerVatInformation(customerId);

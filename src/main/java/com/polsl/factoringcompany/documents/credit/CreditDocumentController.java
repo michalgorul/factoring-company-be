@@ -12,13 +12,28 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.io.ByteArrayOutputStream;
 
+/**
+ * The type credit document controller. Class for creating endpoints.
+ * @author Michal Goral
+ * @version 1.0
+ */
 @RestController
 @AllArgsConstructor
 @RequestMapping(path = "/api/credit/document")
 public class CreditDocumentController {
 
+    /**
+     * the credit document service bean
+     */
     private CreditDocumentService creditDocumentService;
 
+    /**
+     * Gets generated credit document in pdf.
+     *
+     * @param creditNumber the credit number
+     * @return the credit pdf
+     * @throws Exception the exception
+     */
     @GetMapping(path = "/{creditNumber}")
     public ResponseEntity<byte[]> getCreditPdf(@PathVariable String creditNumber) throws Exception {
 
@@ -27,7 +42,6 @@ public class CreditDocumentController {
 
         HttpHeaders headers = new HttpHeaders();
         headers.setContentType(MediaType.APPLICATION_PDF);
-        // Here you have to set the actual filename of your pdf
         String filename = "output.pdf";
         headers.setContentDispositionFormData(filename, filename);
         headers.setCacheControl("must-revalidate, post-check=0, pre-check=0");

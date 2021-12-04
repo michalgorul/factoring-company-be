@@ -25,17 +25,48 @@ import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.HashMap;
 
+/**
+ * The type vat report service. Used to connect controller with Data access object
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class VatReportService {
 
+    /**
+     * the path to vat report document template
+     */
     private final static String PATH = "src/main/resources/templates/vat_report_template.docx";
+
+    /**
+     * the customer service bean
+     */
     private final CustomerService customerService;
+
+    /**
+     * the company service bean
+     */
     private final CompanyService companyService;
+
+    /**
+     * the rest template bean
+     */
     private RestTemplate restTemplate;
+
+    /**
+     * the bank account service bean
+     */
     private final BankAccountService bankAccountService;
 
 
+    /**
+     * Generate docx file from template byte.
+     *
+     * @param customerId the customer id
+     * @return the byte array
+     * @throws Exception the exception
+     */
     public byte[] generateDocxFileFromTemplate(Long customerId) throws Exception {
 
         File invoiceTemplate = new File(PATH);
@@ -58,6 +89,14 @@ public class VatReportService {
         return pdf;
     }
 
+    /**
+     * Gets customer vat information from vat white list based on customer nip number.
+     * It makes API call for https://wl-api.mf.gov.pl/api/search/nip
+     * <a href="https://www.gov.pl/web/kas/api-wykazu-podatnikow-vat">See more</a>
+     *
+     * @param customerId the customer id
+     * @return the customer vat information
+     */
     public VatReportInformation getCustomerVatInformation(Long customerId) {
         LocalDateTime now = LocalDateTime.now();
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");

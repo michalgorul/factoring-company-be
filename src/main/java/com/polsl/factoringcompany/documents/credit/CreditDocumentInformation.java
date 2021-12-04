@@ -11,26 +11,84 @@ import pl.allegro.finance.tradukisto.MoneyConverters;
 
 import java.util.HashMap;
 
+/**
+ * The type Credit document information.
+ * It stores all variables that are necessary for creating credit document
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
 @Component
 public class CreditDocumentInformation {
 
+    /**
+     * the loan amount in words
+     */
     private String loanAmountInWords;
+
+    /**
+     * the loan amount in number
+     */
     private String loanAmount;
+
+    /**
+     * the date of creation credit entity
+     */
     private String creationDate;
+
+    /**
+     * the username
+     */
     private String userName;
+
+    /**
+     * the user's mail address
+     */
     private String userEmail;
+
+    /**
+     * the user's city
+     */
     private String userCity;
+
+    /**
+     * the date of next installment payment
+     */
     private String nextInstallmentDate;
+
+    /**
+     * the day of month that user is obliged to pay installment
+     */
     private String paymentDay;
+
+    /**
+     * the last installment date
+     */
     private String lastInstallmentDate;
+
+    /**
+     * the credit interest of factoring company
+     */
     private String interestInWords;
+
+    /**
+     * the rate of interest of factoring company
+     */
     private String rateOfInterest;
 
+    /**
+     * The constant ApplicationContext .
+     */
     public static ApplicationContext ctx;
 
+    /**
+     * Instantiates a new Credit document information.
+     *
+     * @param creditEntity the credit entity
+     * @param userEntity   the user entity
+     */
     public CreditDocumentInformation(CreditEntity creditEntity, UserEntity userEntity) {
         MoneyConverters converter = MoneyConverters.ENGLISH_BANKING_MONEY_VALUE;
         String loanAmountInWords = converter.asWords(creditEntity.getAmount());
@@ -50,6 +108,11 @@ public class CreditDocumentInformation {
 
     }
 
+    /**
+     * Gets all variables of this instance in hash map.
+     *
+     * @return the variables in hash map
+     */
     public HashMap<String, String> getVariablesInHashMap() {
         HashMap<String, String> variables = new HashMap<>();
         variables.put("loanAmountInWords", this.loanAmountInWords);
