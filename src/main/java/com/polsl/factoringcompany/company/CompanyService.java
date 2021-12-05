@@ -17,24 +17,63 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 import java.util.Optional;
 
+/**
+ * The type company service. Used to connect controller with Data access object
+ *
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @AllArgsConstructor
 public class CompanyService {
 
+    /**
+     * the company repository bean
+     */
     private final CompanyRepository companyRepository;
+
+    /**
+     * the user repository bean
+     */
     private UserRepository userRepository;
+
+    /**
+     * the user service bean
+     */
     private UserService userService;
+
+    /**
+     * the customer service bean
+     */
     private CustomerService customerService;
 
+    /**
+     * Gets all companies from database.
+     *
+     * @return the companies
+     */
     public List<CompanyEntity> getCompanies() {
         return this.companyRepository.findAll();
     }
 
+    /**
+     * Gets company specified by id.
+     *
+     * @param id the id
+     * @return the company
+     */
     public CompanyEntity getCompany(Long id) {
         return this.companyRepository.findById(id)
                 .orElseThrow(() -> new IdNotFoundInDatabaseException("Company not found"));
     }
 
+    /**
+     * Updates company entity and saves it to database.
+     *
+     * @param id                the id
+     * @param companyRequestDto the company request dto
+     * @return the company entity
+     */
     public CompanyEntity updateCompany(Long id, CompanyRequestDto companyRequestDto) {
 
         Optional<CompanyEntity> companyEntityOptional = companyRepository.findById(id);
@@ -58,6 +97,11 @@ public class CompanyService {
         }
     }
 
+    /**
+     * Deletes company from database.
+     *
+     * @param id the id
+     */
     public void deleteCompany(Long id) {
         try {
             this.companyRepository.deleteById(id);
@@ -66,16 +110,31 @@ public class CompanyService {
         }
     }
 
+    /**
+     * Checks if NIP number is already in use while creating new company entity
+     * @param nip the nip number
+     * @return true if nip is in use
+     */
     private boolean ifNipTakenAdding(String nip) {
         Optional<CompanyEntity> companyEntity = companyRepository.findCompanyEntityByNip(nip);
         return companyEntity.isPresent();
     }
 
+    /**
+     * Checks if REGON number is already in use while creating new company entity
+     * @param regon the regon number
+     * @return true if regon is in use
+     */
     private boolean ifRegonTakenAdding(String regon) {
         Optional<CompanyEntity> companyEntity = companyRepository.findCompanyEntityByRegon(regon);
         return companyEntity.isPresent();
     }
 
+    /**
+     * Checks if NIP number is already in use while updating existing company entity
+     * @param nip the nip number
+     * @return true if nip is in use
+     */
     private boolean ifNipTakenUpdating(Long id, String nip) {
         Optional<CompanyEntity> companyEntityByNip = companyRepository.findCompanyEntityByNip(nip);
         Optional<CompanyEntity> companyEntityById = companyRepository.findById(id);
@@ -88,6 +147,11 @@ public class CompanyService {
         return !companyEntityByNip.get().getId().equals(companyEntityById.get().getId());
     }
 
+    /**
+     * Checks if REGON number is already in use while updating existing company entity
+     * @param regon the regon number
+     * @return true if regon is in use
+     */
     private boolean ifRegonTakenUpdating(Long id, String regon) {
         Optional<CompanyEntity> companyEntityByRegon = companyRepository.findCompanyEntityByRegon(regon);
         Optional<CompanyEntity> companyEntityById = companyRepository.findById(id);
@@ -110,6 +174,10 @@ public class CompanyService {
         nameValidator(companyEntity);
     }
 
+    /**
+     * Validates if NIP and REGON are valid while creating new company entity
+     * @param companyEntity the company entity
+     */
     private void addValidate(CompanyRequestDto companyEntity) {
         if (ifNipTakenAdding(companyEntity.getNip()))
             throw new NotUniqueException("Company", "NIP", companyEntity.getNip());
@@ -120,6 +188,10 @@ public class CompanyService {
         nameValidator(companyEntity);
     }
 
+    /**
+     * Validates if names are in proper form while creating new company entity
+     * @param companyEntity the company entity
+     */
     private void nameValidator(CompanyRequestDto companyEntity) {
         if (StringValidator.stringWithSpacesImproper(companyEntity.getCompanyName(), 50)) {
             throw new ValueImproperException(companyEntity.getCompanyName());
@@ -138,6 +210,11 @@ public class CompanyService {
             throw new ValueImproperException(companyEntity.getRegon(), "REGON");
     }
 
+    /**
+     * Gets currently logged user in JWT token company.
+     *
+     * @return the current user company
+     */
     public CompanyEntity getCurrentUserCompany() {
 
         Long id = 0L;
@@ -157,6 +234,12 @@ public class CompanyService {
 
     }
 
+    /**
+     * Updates currently logged in JWT token user a company entity.
+     *
+     * @param companyRequestDto the company request dto
+     * @return the company entity
+     */
     public CompanyEntity updateCurrentUserCompany(CompanyRequestDto companyRequestDto) {
         UserEntity currentUser = userService.getCurrentUser();
         Optional<CompanyEntity> companyEntityOptional = companyRepository.findById((long) currentUser.getCompanyId());
@@ -180,6 +263,12 @@ public class CompanyService {
         }
     }
 
+    /**
+     * Creates currently logged user in JWT token a company entity.
+     *
+     * @param companyRequestDto the company request dto
+     * @return the company entity
+     */
     public CompanyEntity createCurrentUserCompany(CompanyRequestDto companyRequestDto) {
         addValidate(companyRequestDto);
         try {
@@ -199,6 +288,13 @@ public class CompanyService {
 
     }
 
+    /**
+     * Creates customer specified by id a company entity.
+     *
+     * @param customerId        the customer id
+     * @param companyRequestDto the company request dto
+     * @return the company entity
+     */
     public CompanyEntity createCustomerCompany(int customerId, CompanyRequestDto companyRequestDto) {
         addValidate(companyRequestDto);
         try {
