@@ -164,6 +164,11 @@ public class CompanyService {
         return !companyEntityByRegon.get().getId().equals(companyEntityById.get().getId());
     }
 
+    /**
+     * Validates if NIP and REGON and all the rest names are in proper form while updating
+     * @param id the company id
+     * @param companyEntity the company entity
+     */
     private void updateValidate(Long id, CompanyRequestDto companyEntity) {
         if (ifNipTakenUpdating(id, companyEntity.getNip()))
             throw new NotUniqueException("Company", "NIP", companyEntity.getNip());
