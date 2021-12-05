@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.UUID;
 
 /**
- * The type File entity. Representation of invoice item in database
+ * The type File entity. Representation of file in database
  *
  * @author Michal Goral
  * @version 1.0

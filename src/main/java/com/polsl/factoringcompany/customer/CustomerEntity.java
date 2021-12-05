@@ -13,7 +13,7 @@ import javax.persistence.*;
 import java.util.Collection;
 
 /**
- * The type Customer entity. Representation of invoice item in database
+ * The type Customer entity. Representation of customer in database
  *
  * @author Michal Goral
  * @version 1.0

@@ -18,33 +18,78 @@ import java.util.List;
 import java.util.Optional;
 import java.util.regex.Pattern;
 
+/**
+ * The type credit service. Used to connect controller with Data access object
+ *
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Service
 @RequiredArgsConstructor
 public class CreditService {
 
+    /**
+     * the credit repository bean
+     */
     private final CreditRepository creditRepository;
+
+    /**
+     * the user service bean
+     */
     private final UserService userService;
+
+    /**
+     * the transaction service bean
+     */
     private final TransactionService transactionService;
 
+    /**
+     * Gets all credits from database.
+     *
+     * @return the credits
+     */
     public List<CreditEntity> getCredits() {
         return this.creditRepository.findAll();
     }
 
+    /**
+     * Gets credit specified by id. If nothing found throws IdNotFoundInDatabaseException
+     *
+     * @param id the id
+     * @return the credit
+     */
     public CreditEntity getCredit(Long id) {
         return this.creditRepository.findById(id)
                 .orElseThrow(() -> new IdNotFoundInDatabaseException("Credit", id));
     }
 
+    /**
+     * Gets credit number of credit specified by id. If credit not found returns nul
+     *
+     * @param id the id
+     * @return the credit number
+     */
     public String getCreditNumber(Long id) {
         CreditEntity creditEntity = this.creditRepository.findById(id).orElse(null);
         return creditEntity != null ? creditEntity.getCreditNumber() : null;
     }
 
+    /**
+     * Gets credit specified by number. If nothing found throws IdNotFoundInDatabaseException
+     *
+     * @param creditNumber the credit number
+     * @return the credit bu number
+     */
     public CreditEntity getCreditBuNumber(String creditNumber) {
         return this.creditRepository.findByCreditNumber(creditNumber)
                 .orElseThrow(() -> new IdNotFoundInDatabaseException("Credit", 0L));
     }
 
+    /**
+     * Deletes credit specified by id.
+     *
+     * @param id the id
+     */
     public void deleteCredit(Long id) {
         try {
             this.creditRepository.deleteById(id);
@@ -53,11 +98,21 @@ public class CreditService {
         }
     }
 
+    /**
+     * Gets credits of currently logged user in JWT token.
+     *
+     * @return the credits of current user
+     */
     public List<CreditEntity> getCreditsCurrentUser() {
         Long currentUserId = userService.getCurrentUserId();
         return this.creditRepository.findAllByUserId(Math.toIntExact(currentUserId));
     }
 
+    /**
+     * Gets the amount that current user has left to pay.
+     *
+     * @return the left to pay
+     */
     public Double getLeftToPay() {
         Long currentUserId = userService.getCurrentUserId();
 
@@ -70,6 +125,12 @@ public class CreditService {
 
     }
 
+    /**
+     * Creates current user a credit entity.
+     *
+     * @param creditRequestDto the credit request dto
+     * @return the credit entity
+     */
     public CreditEntity createCurrentUserCredit(CreditRequestDto creditRequestDto) {
         try {
             String newCreditNumber = getNewCreditNumber();
@@ -82,6 +143,10 @@ public class CreditService {
         }
     }
 
+    /**
+     * Creates a credit number for a new credit entity
+     * @return a new credit number
+     */
     private String getNewCreditNumber() {
         StringBuilder newCreditNumber = new StringBuilder();
         Formatter formatter = new Formatter(newCreditNumber);
@@ -98,6 +163,11 @@ public class CreditService {
         return newCreditNumber.toString();
     }
 
+    /**
+     * Updates status of credit from in review to active.
+     * It also creates a transaction entity which has benefit of whole credit amount
+     * @param creditEntity the credit entity
+     */
     private void updateFromInReviewToActive(CreditEntity creditEntity) {
         try {
             creditEntity.setStatus("active");
@@ -115,6 +185,10 @@ public class CreditService {
         }
     }
 
+    /**
+     * Updates status of credit from active to funded.
+     * @param creditEntity the credit entity
+     */
     private void updateFromActiveToFunded(CreditEntity creditEntity) {
         try {
             creditEntity.setStatus("funded");
@@ -124,6 +198,11 @@ public class CreditService {
         }
     }
 
+    /**
+     * Checks if proper file is uploaded to database in order to make credit entity status 'in review'
+     * @param fileName the file name of credit document
+     * @return the name of file and credit number in HashMap
+     */
     private HashMap<String, String> ifProperFileUploadedAndReturnNameAndCreditNumber(String fileName) {
         String patterns = "\\S*[_]\\S*[_]\\d{1,2}[_]\\d{1,2}[_]\\d{4}.pdf";
         Pattern pattern = Pattern.compile(patterns);
@@ -139,6 +218,12 @@ public class CreditService {
             return null;
     }
 
+    /**
+     * Updates credit status from processing to in review.
+     * It happens if user uploads proper file to factoring company database
+     *
+     * @param fileName the file name
+     */
     public void updateFromProcessingToInReview(String fileName) {
         try {
             HashMap<String, String> mapToCheck = ifProperFileUploadedAndReturnNameAndCreditNumber(fileName);
@@ -157,7 +242,10 @@ public class CreditService {
         }
     }
 
-    //    @Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
+    /**
+     * Update credit statuses. It happens every day at 00.01
+     */
+//    @Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
     //    Fires at 12 PM every day:
     @Scheduled(cron = "0 1 0 * * ?")
     public void updateCreditStatuses() {
@@ -174,11 +262,23 @@ public class CreditService {
         System.out.println("credit statuses updated");
     }
 
+    /**
+     * Gets schedule of credit entity.
+     *
+     * @param id the id
+     * @return the schedule
+     */
     public List<CreditSchedule> getSchedule(Long id) {
         Optional<CreditEntity> byId = this.creditRepository.findById(id);
         return byId.map(CreditSchedule::getSchedule).orElse(null);
     }
 
+    /**
+     * Adds standard payment to credit entity. So the paid by user amount increases and left to pay decreases
+     *
+     * @param id the id
+     * @return the credit entity
+     */
     public CreditEntity addStandardPayment(Long id) {
         CreditEntity creditEntity = getCredit(id);
         try {
@@ -199,6 +299,13 @@ public class CreditService {
         }
     }
 
+    /**
+     * Add overpay payment credit entity with specified amount.
+     *
+     * @param amount the amount
+     * @param id     the id
+     * @return the credit entity
+     */
     public CreditEntity addOverpayPayment(Double amount, Long id) {
         CreditEntity creditEntity = getCredit(id);
         try {

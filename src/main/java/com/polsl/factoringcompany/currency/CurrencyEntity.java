@@ -14,7 +14,7 @@ import java.util.Collection;
 import java.util.Objects;
 
 /**
- * The type currency entity. Representation of invoice item in database
+ * The type currency entity. Representation of currency in database
  *
  * @author Michal Goral
  * @version 1.0

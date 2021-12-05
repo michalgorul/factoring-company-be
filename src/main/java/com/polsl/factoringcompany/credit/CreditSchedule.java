@@ -9,17 +9,48 @@ import java.sql.Date;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The type Credit schedule.
+ * @author Michal Goral
+ * @version 1.0
+ */
 @Getter
 @Setter
 @RequiredArgsConstructor
 @AllArgsConstructor
 public class CreditSchedule {
+
+    /**
+     * the id
+     */
     private Integer id;
+
+    /**
+     * the date
+     */
     private Date dateTime;
+
+    /**
+     * the description
+     */
     private String description;
+
+    /**
+     * the amount
+     */
     private Double amount;
+
+    /**
+     * the balance
+     */
     private Double balance;
 
+    /**
+     * Gets schedule of specific credit.
+     *
+     * @param creditEntity the credit entity
+     * @return the schedule
+     */
     public static List<CreditSchedule> getSchedule(CreditEntity creditEntity) {
         List<CreditSchedule> creditScheduleList = new ArrayList<>();
         double currentBalance = creditEntity.getAmount().doubleValue() - creditEntity.getNextPayment().doubleValue();
