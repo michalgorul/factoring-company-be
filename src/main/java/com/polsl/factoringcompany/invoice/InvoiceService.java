@@ -305,7 +305,7 @@ public class InvoiceService {
 
         return allByUserId
                 .stream()
-                .map(InvoiceEntity::getPaidByUser)
+                .map(InvoiceEntity::getToPayByUser)
                 .mapToDouble(BigDecimal::doubleValue).sum();
 
     }
