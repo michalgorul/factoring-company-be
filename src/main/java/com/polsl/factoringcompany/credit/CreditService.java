@@ -245,9 +245,9 @@ public class CreditService {
     /**
      * Update credit statuses. It happens every day at 00.01
      */
-//    @Scheduled(cron = "[Seconds] [Minutes] [Hours] [Day of month] [Month] [Day of week] [Year]")
+    @Scheduled(fixedRate = 15000)
     //    Fires at 12 PM every day:
-    @Scheduled(cron = "0 1 0 * * ?")
+    //@Scheduled(cron = "0 1 0 * * ?")
     public void updateCreditStatuses() {
         List<CreditEntity> allByStatusEqualsReview = this.creditRepository.findAllByStatusEquals("review");
         for (CreditEntity creditEntity : allByStatusEqualsReview) {
